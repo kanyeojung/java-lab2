@@ -1,4 +1,6 @@
 package org.example;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringProcessor {
     public static String repeatString(String s, int n) {
@@ -66,7 +68,27 @@ public class StringProcessor {
             }
         }
 
-        return text; // пока временно, чтобы метод не был красным
+        return result.toString();
     }
 
+    public static String replaceHexNumbers(String text) {
+        Pattern pattern = Pattern.compile("0x[0-9a-fA-F]{8}(?![0-9a-fA-F])");
+        Matcher matcher = pattern.matcher(text);
+
+        StringBuilder result = new StringBuilder();
+        int previousEnd = 0;
+
+        while (matcher.find()) {
+            result.append(text, previousEnd, matcher.start());
+
+            String hexNumber = matcher.group().substring(2);
+            long decimalNumber = Long.parseLong(hexNumber, 16);
+            result.append(decimalNumber);
+
+            previousEnd = matcher.end();
+        }
+
+        result.append(text.substring(previousEnd));
+        return result.toString();
+    }
 }

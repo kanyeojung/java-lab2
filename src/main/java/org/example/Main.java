@@ -7,5 +7,8 @@ public class Main {
         StringBuilder text = new StringBuilder("abcde");
         StringProcessor.removeEverySecond(text);
         System.out.println(text);
+        System.out.println(StringProcessor.replaceHexNumbers(
+                "Васе 0x00000010 лет, а число 0x000000FF равно 255"
+        ));
     }
 }
