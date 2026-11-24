@@ -15,6 +15,21 @@ public class FinanceReport {
         this.year = year;
     }
 
+    public FinanceReport(FinanceReport original) {
+        this.author = original.author;
+        this.day = original.day;
+        this.month = original.month;
+        this.year = original.year;
+        this.payments = new Payment[original.payments.length];
+
+        for (int i = 0; i < original.payments.length; i++) {
+            Payment payment = original.payments[i];
+            if (payment != null) {
+                this.payments[i] = new Payment(payment.getFullName(), payment.getDay(), payment.getMonth(), payment.getYear(), payment.getAmount());
+            }
+        }
+    }
+
     public int getPaymentCount() {
         return payments.length;
     }

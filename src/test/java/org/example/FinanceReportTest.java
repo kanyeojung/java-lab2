@@ -90,4 +90,53 @@ class FinanceReportTest {
         assertTrue(text.contains("Платежи: ["));
         assertTrue(text.endsWith("]]"));
     }
+
+    @Test
+    void copyConstructorCopiesReportData() {
+        Payment payment = new Payment("Иванов Иван", 12, 5, 2026, 12550);
+        FinanceReport original = new FinanceReport(
+                new Payment[]{payment}, "Полина", 20, 11, 2026
+        );
+
+        FinanceReport copy = new FinanceReport(original);
+
+        assertEquals("Полина", copy.getAuthor());
+        assertEquals(20, copy.getDay());
+        assertEquals(11, copy.getMonth());
+        assertEquals(2026, copy.getYear());
+        assertEquals(1, copy.getPaymentCount());
+        assertEquals(payment, copy.getPayment(0));
+    }
+
+    @Test
+    void changingOriginalPaymentDoesNotChangeCopy() {
+        Payment payment = new Payment("Иванов Иван", 12, 5, 2026, 12550);
+        FinanceReport original = new FinanceReport(
+                new Payment[]{payment}, "Полина", 20, 11, 2026
+        );
+
+        FinanceReport copy = new FinanceReport(original);
+        payment.setAmount(99999);
+        payment.setFullName("Другой человек");
+
+        assertEquals(12550, copy.getPayment(0).getAmount());
+        assertEquals("Иванов Иван", copy.getPayment(0).getFullName());
+        assertNotSame(payment, copy.getPayment(0));
+    }
+
+    @Test
+    void replacingPaymentInOriginalDoesNotChangeCopy() {
+        Payment first = new Payment("Иванов Иван", 12, 5, 2026, 12550);
+        FinanceReport original = new FinanceReport(
+                new Payment[]{first}, "Полина", 20, 11, 2026
+        );
+
+        FinanceReport copy = new FinanceReport(original);
+        original.setPayment(
+                0, new Payment("Петров Пётр", 1, 6, 2026, 500)
+        );
+
+        assertEquals("Иванов Иван", copy.getPayment(0).getFullName());
+        assertEquals(12550, copy.getPayment(0).getAmount());
+    }
 }
